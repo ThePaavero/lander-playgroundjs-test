@@ -5,7 +5,7 @@ ENGINE.Game = {
         this.debugConsoleElement = document.querySelector('.debug-console');
 
         this.states = {
-            groundY: 560,
+            groundY: (560 / 2) - 57,
             uppingThrusters: {
                 'up': false,
                 'left': false,
