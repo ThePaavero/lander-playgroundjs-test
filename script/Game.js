@@ -28,7 +28,8 @@ ENGINE.Game = {
             ship: {
                 x: 0,
                 y: - 800,
-                gravity: 13
+                gravity: 13,
+                downVelocity: 0
             }
         };
     },
@@ -36,7 +37,7 @@ ENGINE.Game = {
     step: function (dt) {
         if (this.states.uppingThrusters.up) {
             if (this.states.thrusters.up.currentPower < this.states.thrusters.up.maxPower) {
-                this.states.thrusters.up.currentPower += 0.1 + (this.states.thrusters.up.currentPower / 60);
+                this.states.thrusters.up.currentPower += 0.1 + (this.states.thrusters.up.currentPower / 35);
             }
         } else {
             if (this.states.thrusters.up.currentPower > 0) {
@@ -70,12 +71,19 @@ ENGINE.Game = {
             }
         }
 
+        if (this.states.ship.downVelocity < 10) {
+            this.states.ship.downVelocity = this.states.ship.gravity - this.states.thrusters.up.currentPower;
+        }
+
         this.states.ship.x += this.states.thrusters.right.currentPower;
         this.states.ship.x -= this.states.thrusters.left.currentPower;
-        this.states.ship.y += this.states.ship.gravity;
+        this.states.ship.y += this.states.ship.downVelocity;
 
         // Hit the ground?
         if (this.states.ship.y >= this.states.groundY) {
+            // Did we crash?
+            console.log(this.states.ship.downVelocity);
+
             this.states.ship.y = this.states.groundY;
         }
 
