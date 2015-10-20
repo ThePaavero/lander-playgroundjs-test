@@ -8,6 +8,8 @@ var app = new PLAYGROUND.Application({
 
     ready: function () {
         this.setState(ENGINE.Game);
-    }
+    },
+
+    container: document.querySelector('.game')
 
 });

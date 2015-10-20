@@ -2,8 +2,10 @@ ENGINE.Game = {
 
     create: function () {
 
+        this.debugConsoleElement = document.querySelector('.debug-console');
+
         this.states = {
-            groundY: 600,
+            groundY: 560,
             uppingThrusters: {
                 'up': false,
                 'left': false,
@@ -12,13 +14,13 @@ ENGINE.Game = {
             thrusters: {
                 'up': {
                     'currentPower': 0,
-                    'maxPower': 65
+                    'maxPower': 16
                 }
             },
             ship: {
                 x: 0,
                 y: 0,
-                gravity: 0.01
+                gravity: 9
             }
         };
     },
@@ -26,19 +28,19 @@ ENGINE.Game = {
     step: function (dt) {
         if (this.states.uppingThrusters.up) {
             if (this.states.thrusters.up.currentPower < this.states.thrusters.up.maxPower) {
-                this.states.thrusters.up.currentPower += 1 + (this.states.thrusters.up.currentPower / 10);
+                this.states.thrusters.up.currentPower += 0.1 + (this.states.thrusters.up.currentPower / 60);
             }
         } else {
             if (this.states.thrusters.up.currentPower > 0) {
-                this.states.thrusters.up.currentPower -= 1;
+                this.states.thrusters.up.currentPower -= 0.3;
             }
         }
 
         this.states.ship.y -= this.states.thrusters.up.currentPower;
 
-        if (this.states.ship.gravity < 60) {
-            this.states.ship.gravity += 0.05 + (this.states.ship.gravity / 15);
-        }
+        //if (this.states.ship.gravity < 40) {
+        //    this.states.ship.gravity += 0.05 + (this.states.ship.gravity / 30);
+        //}
 
         this.states.ship.y += this.states.ship.gravity;
 
@@ -46,6 +48,8 @@ ENGINE.Game = {
         if (this.states.ship.y >= this.states.groundY) {
             this.states.ship.y = this.states.groundY;
         }
+
+        this.logToDebug();
     },
 
     upThruster: function (engine) {
@@ -76,6 +80,11 @@ ENGINE.Game = {
         //layer.scale(3, 3);
         layer.drawImage(app.images.ship, this.states.ship.x, this.states.ship.y);
         layer.restore();
+    },
+
+    logToDebug: function () {
+        var markup = '<p>Ship gravity: ' + this.states.ship.gravity + '</p>';
+        this.debugConsoleElement.innerHTML = markup;
     }
 
 };
