@@ -52,7 +52,7 @@ ENGINE.Game = {
             }
         } else {
             if (this.states.thrusters.left.currentPower > 0) {
-                this.states.thrusters.left.currentPower -= 0.3;
+                this.states.thrusters.left.currentPower -= 0.05;
             } else {
                 this.states.thrusters.left.currentPower = 0;
             }
@@ -64,7 +64,7 @@ ENGINE.Game = {
             }
         } else {
             if (this.states.thrusters.right.currentPower > 0) {
-                this.states.thrusters.right.currentPower -= 0.3;
+                this.states.thrusters.right.currentPower -= 0.05;
             } else {
                 this.states.thrusters.right.currentPower = 0;
             }
@@ -107,6 +107,10 @@ ENGINE.Game = {
             var y = 0;
             var sizeX = size;
             var sizeY = size;
+
+            if (this.states.uppingThrusters[name] === false) {
+                continue;
+            }
 
             switch (name) {
                 case 'up':
