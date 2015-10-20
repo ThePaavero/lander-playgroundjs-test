@@ -102,14 +102,25 @@ ENGINE.Game = {
         for (var i in this.states.thrusters) {
             var name = i;
             var thruster = this.states.thrusters[i];
-            var power = thruster.currentPower;
-            var particleAmount = power / 2;
+            var size = thruster.currentPower * 2;
+            var x = 0;
+            var y = 0;
+            var sizeX = size;
+            var sizeY = size;
 
-            for (n = 0; n < particleAmount; n ++) {
-                var x = 0;
-                var y = 0;
-                layer.drawImage(app.images.particle, x, y);
+            switch (name) {
+                case 'up':
+                    x = this.states.ship.x;
+                    y = this.states.ship.y + 50;
+                    sizeX = size / 2.4;
+                    break;
+                case 'left':
+                    x = this.states.ship.x + 40;
+                    y = this.states.ship.y;
+                    sizeY = size / 2.4;
+                    break;
             }
+            layer.drawImage(this.app.images.particle, 0, 0, 49, 49, x, y, sizeX, sizeY);
         }
     },
 
@@ -122,8 +133,10 @@ ENGINE.Game = {
         layer.translate(app.center.x, app.center.y);
         layer.align(0.5, 0.5);
         //layer.scale(3, 3);
+
         layer.drawImage(app.images.ship, this.states.ship.x, this.states.ship.y);
         this.drawThrusters(layer);
+
         layer.restore();
     },
 
