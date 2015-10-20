@@ -1,6 +1,10 @@
-ENGINE.Round = function() {
+ENGINE.Round = function (planet) {
 
-    this.create = function() {
+    this.planet = planet;
+    console.log('Planet is "' + planet.name + '"');
+    console.log('Gravity is "' + planet.gravity + '"');
+
+    this.create = function () {
 
         this.debugConsoleElement = document.querySelector('.debug-console');
 
@@ -28,14 +32,14 @@ ENGINE.Round = function() {
             ship: {
                 x: 0,
                 y: - 800,
-                gravity: 13,
+                gravity: this.planet.gravity,
                 downVelocity: 0,
                 inTheAir: true
             }
         };
     };
 
-    this.step = function(dt) {
+    this.step = function (dt) {
 
         if (this.states.ship.inTheAir === false) {
             console.log('On the ground');
@@ -92,10 +96,11 @@ ENGINE.Round = function() {
             this.states.ship.inTheAir = false;
 
             // Did we crash?
-            if (this.states.ship.downVelocity > 10) {
-                return this.doOnCrash();
+            console.log('this.states.ship.downVelocity: ' + this.states.ship.downVelocity);
+            if (this.states.ship.downVelocity > 5) {
+                this.app.setState(ENGINE.GameOver);
             } else {
-                return this.doOnSuccessfulLanding();
+                this.app.nextPlanet();
             }
 
             this.states.ship.y = this.states.groundY;
@@ -104,23 +109,23 @@ ENGINE.Round = function() {
         this.logToDebug();
     };
 
-    this.upThruster = function(engine) {
+    this.upThruster = function (engine) {
         this.states.uppingThrusters[engine] = true;
     },
 
-    this.zeroThruster = function(engine) {
-        this.states.uppingThrusters[engine] = false;
-    };
+        this.zeroThruster = function (engine) {
+            this.states.uppingThrusters[engine] = false;
+        };
 
-    this.keydown = function(event) {
+    this.keydown = function (event) {
         this.upThruster(event.key);
     };
 
-    this.keyup = function(event) {
+    this.keyup = function (event) {
         this.zeroThruster(event.key);
     };
 
-    this.drawThrusters = function(layer) {
+    this.drawThrusters = function (layer) {
         for (var i in this.states.thrusters) {
             var name = i;
             var thruster = this.states.thrusters[i];
@@ -157,7 +162,7 @@ ENGINE.Round = function() {
         }
     };
 
-    this.render = function() {
+    this.render = function () {
         var app = this.app;
         var layer = this.app.layer;
 
@@ -173,20 +178,12 @@ ENGINE.Round = function() {
         layer.restore();
     };
 
-    this.logToDebug = function() {
+    this.logToDebug = function () {
         var markup = '<p>Ship gravity: ' + this.states.ship.gravity + '</p>' +
             '<p>this.states.thrusters.up.currentPower: ' + this.states.thrusters.up.currentPower + '</p>' +
             '<p>this.states.thrusters.right.currentPower: ' + this.states.thrusters.right.currentPower + '</p>' +
             '<p>this.states.thrusters.left.currentPower: ' + this.states.thrusters.left.currentPower + '</p>';
         this.debugConsoleElement.innerHTML = markup;
-    };
-
-    this.doOnCrash = function() {
-        this.app.setState(ENGINE.GameOver);
-    };
-
-    this.doOnSuccessfulLanding = function() {
-        // ...
     };
 
 };
