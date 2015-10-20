@@ -29,12 +29,19 @@ ENGINE.Game = {
                 x: 0,
                 y: - 800,
                 gravity: 13,
-                downVelocity: 0
+                downVelocity: 0,
+                inTheAir: true
             }
         };
     },
 
     step: function (dt) {
+
+        if (this.states.ship.inTheAir === false) {
+            console.log('On the ground');
+            return;
+        }
+
         if (this.states.uppingThrusters.up) {
             if (this.states.thrusters.up.currentPower < this.states.thrusters.up.maxPower) {
                 this.states.thrusters.up.currentPower += 0.1 + (this.states.thrusters.up.currentPower / 35);
@@ -71,7 +78,7 @@ ENGINE.Game = {
             }
         }
 
-        if (this.states.ship.downVelocity < 10) {
+        if (this.states.ship.downVelocity < 150) {
             this.states.ship.downVelocity = this.states.ship.gravity - this.states.thrusters.up.currentPower;
         }
 
@@ -81,8 +88,11 @@ ENGINE.Game = {
 
         // Hit the ground?
         if (this.states.ship.y >= this.states.groundY) {
+            this.states.ship.inTheAir = false;
             // Did we crash?
-            console.log(this.states.ship.downVelocity);
+            if (this.states.ship.downVelocity > 10) {
+                console.log('CRASH!');
+            }
 
             this.states.ship.y = this.states.groundY;
         }
