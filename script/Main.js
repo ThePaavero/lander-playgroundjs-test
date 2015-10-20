@@ -11,7 +11,7 @@ var app = new PLAYGROUND.Application({
     },
 
     ready: function () {
-        this.setState(ENGINE.Game);
+        this.setState(new ENGINE.Round());
     },
 
     container: document.querySelector('.game')
