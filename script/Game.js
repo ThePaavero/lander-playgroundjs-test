@@ -110,6 +110,8 @@ ENGINE.Game = {
 
             switch (name) {
                 case 'up':
+                    sizeX = size * 2;
+                    sizeY = size * 2;
                     x = this.states.ship.x;
                     y = this.states.ship.y + 50;
                     sizeX = size / 2.4;
@@ -117,7 +119,12 @@ ENGINE.Game = {
                 case 'left':
                     x = this.states.ship.x + 40;
                     y = this.states.ship.y;
-                    sizeY = size / 2.4;
+                    sizeX = size * 3.4;
+                    break;
+                case 'right':
+                    x = this.states.ship.x - 40;
+                    y = this.states.ship.y;
+                    sizeX = size * 3.4;
                     break;
             }
             layer.drawImage(this.app.images.particle, 0, 0, 49, 49, x, y, sizeX, sizeY);
