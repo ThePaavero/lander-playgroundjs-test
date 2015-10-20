@@ -15,12 +15,20 @@ ENGINE.Game = {
                 'up': {
                     'currentPower': 0,
                     'maxPower': 16
+                },
+                'left': {
+                    'currentPower': 0,
+                    'maxPower': 5
+                },
+                'right': {
+                    'currentPower': 0,
+                    'maxPower': 5
                 }
             },
             ship: {
                 x: 0,
-                y: 0,
-                gravity: 9
+                y: - 800,
+                gravity: 13
             }
         };
     },
@@ -38,10 +46,32 @@ ENGINE.Game = {
 
         this.states.ship.y -= this.states.thrusters.up.currentPower;
 
-        //if (this.states.ship.gravity < 40) {
-        //    this.states.ship.gravity += 0.05 + (this.states.ship.gravity / 30);
-        //}
+        if (this.states.uppingThrusters.left) {
+            if (this.states.thrusters.left.currentPower < this.states.thrusters.left.maxPower) {
+                this.states.thrusters.left.currentPower += 0.1 + (this.states.thrusters.left.currentPower / 60);
+            }
+        } else {
+            if (this.states.thrusters.left.currentPower > 0) {
+                this.states.thrusters.left.currentPower -= 0.3;
+            } else {
+                this.states.thrusters.left.currentPower = 0;
+            }
+        }
 
+        if (this.states.uppingThrusters.right) {
+            if (this.states.thrusters.right.currentPower < this.states.thrusters.right.maxPower) {
+                this.states.thrusters.right.currentPower += 0.1 + (this.states.thrusters.right.currentPower / 60);
+            }
+        } else {
+            if (this.states.thrusters.right.currentPower > 0) {
+                this.states.thrusters.right.currentPower -= 0.3;
+            } else {
+                this.states.thrusters.right.currentPower = 0;
+            }
+        }
+
+        this.states.ship.x += this.states.thrusters.right.currentPower;
+        this.states.ship.x -= this.states.thrusters.left.currentPower;
         this.states.ship.y += this.states.ship.gravity;
 
         // Hit the ground?
@@ -54,7 +84,6 @@ ENGINE.Game = {
 
     upThruster: function (engine) {
         this.states.uppingThrusters[engine] = true;
-        console.log('UP!');
     },
 
     zeroThruster: function (engine) {
@@ -83,7 +112,10 @@ ENGINE.Game = {
     },
 
     logToDebug: function () {
-        var markup = '<p>Ship gravity: ' + this.states.ship.gravity + '</p>';
+        var markup = '<p>Ship gravity: ' + this.states.ship.gravity + '</p>' +
+            '<p>this.states.thrusters.up.currentPower: ' + this.states.thrusters.up.currentPower + '</p>' +
+            '<p>this.states.thrusters.right.currentPower: ' + this.states.thrusters.right.currentPower + '</p>' +
+            '<p>this.states.thrusters.left.currentPower: ' + this.states.thrusters.left.currentPower + '</p>';
         this.debugConsoleElement.innerHTML = markup;
     }
 
