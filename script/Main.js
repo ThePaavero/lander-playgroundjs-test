@@ -4,6 +4,7 @@ var app = new PLAYGROUND.Application({
 
     create: function () {
         this.loadImage('ship');
+        this.loadImage('particle');
     },
 
     ready: function () {

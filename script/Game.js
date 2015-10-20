@@ -98,6 +98,21 @@ ENGINE.Game = {
         this.zeroThruster(event.key);
     },
 
+    drawThrusters: function (layer) {
+        for (var i in this.states.thrusters) {
+            var name = i;
+            var thruster = this.states.thrusters[i];
+            var power = thruster.currentPower;
+            var particleAmount = power / 2;
+
+            for (n = 0; n < particleAmount; n ++) {
+                var x = 0;
+                var y = 0;
+                layer.drawImage(app.images.particle, x, y);
+            }
+        }
+    },
+
     render: function () {
         var app = this.app;
         var layer = this.app.layer;
@@ -108,6 +123,7 @@ ENGINE.Game = {
         layer.align(0.5, 0.5);
         //layer.scale(3, 3);
         layer.drawImage(app.images.ship, this.states.ship.x, this.states.ship.y);
+        this.drawThrusters(layer);
         layer.restore();
     },
 
